@@ -70,16 +70,47 @@ async function infoRick(){
     }
 }
 */
+const mainElement = document.querySelector('main');
+const section = document.createElement('section');
+section.classList.add('contentSection');
+mainElement.append(section);
+
 const getButton = document.querySelector('#getButton');
 getButton.addEventListener('click', postContent)
-async function postContent(){
+
+async function postContent() {
     try {
-        const infoFetch = await fetch("https://jsonplaceholder.typicode.com/posts")
-        for (const element of infoFetch) {
+        // Realiza una solicitud fetch a la URL y espera la respuesta, luego convierte la respuesta a JSON
+        const infoFetch = await (await fetch("https://jsonplaceholder.typicode.com/posts")).json();
+
+        // Itera sobre cada elemento en la respuesta JSON
+        for await (const element of infoFetch) {  
+            // Crea un nuevo elemento <article>
+            const article = document.createElement('article');
+
+            // Crea un nuevo elemento <p> para el título y le añade una clase y el texto del título
+            const bodyTitle = document.createElement('p');
+            bodyTitle.classList.add('bodyTitle');
+            bodyTitle.innerText = element.title;
+            article.append(bodyTitle); // Añade el título al artículo
             
-            document.createElement('p').innerText = element.title.toString();
+            // Crea un nuevo elemento <p> para el cuerpo y le añade una clase y el texto del cuerpo
+            const bodyFetch = document.createElement('p');
+            bodyFetch.classList.add('bodyFetch');
+            bodyFetch.innerText = element.body;
+            article.append(bodyFetch); // Añade el cuerpo al artículo
+
+            // Crea un nuevo botón para eliminar el contenido y le añade una clase y el texto del botón
+            const deleteButton = document.createElement('button');
+            deleteButton.classList.add('deleteButton');
+            deleteButton.textContent = "Delete Content";
+            article.append(deleteButton); // Añade el botón al artículo
+
+            // Añade el artículo completo a la sección del documento
+            section.append(article);
         }
     } catch (error) {
+        // Si ocurre un error, lo muestra en la consola
         console.log(error);
     }
 }
