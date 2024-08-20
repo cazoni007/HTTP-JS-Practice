@@ -70,3 +70,18 @@ async function infoRick(){
     }
 }
 */
+const getButton = document.querySelector('#getButton');
+getButton.addEventListener('click', postContent)
+async function postContent(){
+    try {
+        const infoFetch = await fetch("https://jsonplaceholder.typicode.com/posts")
+        for (const element of infoFetch) {
+            
+            document.createElement('p').innerText = element.title.toString();
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+// fetch("https://jsonplaceholder.typicode.com/posts")
+//     .then((response) => console.log(response.json()))
