@@ -87,7 +87,7 @@ function FetchContent(url, method, data) {
         return fetch(url, {
                method: method,
                body: JSON.stringify(data),
-               headers: {"conent-type": "application/json"},
+               headers: {"content-type": "application/json"},
     }).then(response => {return response.json()})
 }
 
