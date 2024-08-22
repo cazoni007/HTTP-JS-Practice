@@ -70,18 +70,31 @@ async function infoRick(){
     }
 }
 */
+const inputText = document.querySelector('#titleText');
+const inputContent = document.querySelector('#contentText');
 const mainElement = document.querySelector('main');
 const section = document.createElement('section');
 section.classList.add('contentSection');
 mainElement.append(section);
 
-const getButton = document.querySelector('#getButton');
-getButton.addEventListener('click', postContent)
+const postButton = document.querySelector('#postButton');
+postButton.addEventListener('click', postContentPro);
 
-async function postContent() {
+const getButton = document.querySelector('#getButton');
+getButton.addEventListener('click', GetContent)
+
+function FetchContent(url, method, data) {
+        return fetch(url, {
+               method: method,
+               body: JSON.stringify(data),
+               headers: {"conent-type": "application/json"},
+    }).then(response => {return response.json()})
+}
+
+async function GetContent() {
     try {
         // Realiza una solicitud fetch a la URL y espera la respuesta, luego convierte la respuesta a JSON
-        const infoFetch = await (await fetch("https://jsonplaceholder.typicode.com/posts")).json();
+        const infoFetch = await FetchContent("https://jsonplaceholder.typicode.com/posts", "GET");
 
         // Itera sobre cada elemento en la respuesta JSON
         for await (const element of infoFetch) {  
@@ -114,5 +127,19 @@ async function postContent() {
         console.log(error);
     }
 }
-// fetch("https://jsonplaceholder.typicode.com/posts")
-//     .then((response) => console.log(response.json()))
+
+async function postContent(title, content) {
+    const userId = Math.random();
+    const post = {
+        title: title,
+        body: content,
+        userId: userId,
+    }
+    FetchContent("https://jsonplaceholder.typicode.com/posts", "POST", post);
+}
+
+function postContentPro() {
+    const title = inputText.value;
+    const content = inputContent.value;
+    postContent(title,content);
+}
